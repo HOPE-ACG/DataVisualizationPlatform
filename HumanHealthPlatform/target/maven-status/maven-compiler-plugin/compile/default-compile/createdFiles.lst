@@ -1,0 +1,7 @@
+com\acg\util\MybatisUtil.class
+com\acg\pojo\SensorHydrogel.class
+com\acg\controller\SensorHydrogelController.class
+com\acg\controller\JumpInternalResourceController.class
+com\acg\service\SensorHydrogelService.class
+com\acg\service\SensorHydrogelServiceImpl.class
+com\acg\dao\SensorHydrogelMapper.class

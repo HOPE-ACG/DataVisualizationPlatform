@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>统计正常与异常值</title>
+    <script type="text/javascript" src="/HumanHealthPlatform/js/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="/HumanHealthPlatform/js/highcharts.js"></script>
+    <script type="text/javascript" src="/HumanHealthPlatform/js/dark-unica.js"></script>
+    <script type="text/javascript" src="/HumanHealthPlatform/js/oldie.js"></script>
+    <style type="text/css">
+        html,body{width: 100%;height: 100%;}
+    </style>
+</head>
+<body>
+<div id="container" style="width: 90%;height: 90%;position: absolute;margin-bottom: 10%;right: 3%;border-width: 5px;border-style: solid;border-color: #87CEFA;"></div>
+
+<script type="text/javascript">
+
+    //const Highcharts = require("/HumanHealthPlatform/js/dark-unica");
+
+    $(document).ready(requestData());
+
+    function requestData() {
+        let chart;
+        $.ajax({
+            url		 : '/HumanHealthPlatform/certainData',
+            dataType : "json",
+            success  : function(data) {
+                let norm = 0
+                let exp = 0
+                for(let i=0; i<data.length; i++){
+                    if(data[i]>400) ++norm
+                    else ++exp
+                }
+                chart = Highcharts.chart('container', {
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled:false
+                    },
+                    chart: {
+                        type: 'bar',
+                        backgroundColor: 'rgba(255,255,255,0.1)'
+                    },
+                    title: {
+                        text: 'Statistic Data',
+                    },
+                    xAxis: {
+                        categories: ['NORMAL', 'EXCEPTION']
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'QUANTITY',
+                            align: 'high'
+                        },
+                        labels: {
+                            overflow: 'justify'
+                        }
+                    },
+                    legend: {
+                        enabled: false,
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -40,
+                        y: 100,
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    },
+                    plotOptions: {
+                        bar: {
+                            //colors: ['rgba(92, 172, 238, 0.5)', 'rgba(255, 255, 255, 0.5)'],
+                            borderColor: 'rgb(92, 172, 238)'
+                        }
+                    },
+                    series: [{
+                        data: [{'color':'rgba(92, 172, 238, 0.5)','y':norm},
+                            {'color':'rgba(255, 255, 255,0.5)','borderColor':'rgb(255,255,0)','y':exp}]
+                    }]
+                });
+            }
+        });
+    }
+
+    // 2s后继续调用本函数
+    setInterval(requestData, 2000);
+
+</script>
+</body>
+</html>

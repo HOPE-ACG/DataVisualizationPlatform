@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="com.acg.service"/>
+    <!-- 注入到Spring -->
+    <bean id="sensorHydrogelServiceImpl" class="com.acg.service.SensorHydrogelServiceImpl">
+        <property name="mapper" ref="sensorHydrogelMapper"/>
+    </bean>
+    <!-- 声明式事务配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 配置AOP，实现事务织入 default:transaction-manager="transactionManager" -->
+    <tx:advice id="txAdvice" >
+        <!-- 以下方法配置事务 default:propagation="REQUIRED"
+        (如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中) -->
+        <tx:attributes>
+            <tx:method name="updateData"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- 配置事务切入 -->
+    <aop:config>
+        <aop:pointcut id="txPointCut" expression="execution(* com.acg.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
+    </aop:config>
+</beans>

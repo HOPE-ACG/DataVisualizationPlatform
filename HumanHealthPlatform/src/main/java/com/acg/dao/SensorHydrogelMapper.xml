@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.acg.dao.SensorHydrogelMapper">
+    <!-- 使用二级缓存 eviction默认：LRU-->
+    <cache eviction="FIFO"
+           flushInterval="60000"
+           size="512"
+           readOnly="true"/>
+    <!-- 获取最新数据-->
+    <select id="obtainLatestData" resultType="double">
+       select vol from sensor_z where time in
+       (
+            select max(time) from sensor_z
+       )
+    </select>
+    <!-- 获取过去某段时间最大数据值 -->
+    <select id="obtainBiggestData" parameterType="map" resultType="double">
+        select max(vol) from sensor_z where time
+            between #{start} and #{end};
+    </select>
+    <!-- 获取过去某段时间的全部数据 -->
+    <select id="obtainCertainData" parameterType="map" resultType="double">
+        select vol from sensor_z where time
+            between #{start} and #{end};
+    </select>
+</mapper>
