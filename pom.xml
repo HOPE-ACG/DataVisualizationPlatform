@@ -10,6 +10,7 @@
     <version>1.0</version>
     <modules>
         <module>HumanHealthPlatform</module>
+        <module>CommonSerialPortInteractivePlatform</module>
     </modules>
 
     <dependencies>
@@ -19,35 +20,10 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.47</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-            <version>0.9.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.3</version>
-        </dependency>
     </dependencies>
+
     <build>
-        <!-- 配置java编译版本 -->
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
+        <!-- 静态文件及时编译 -->
         <resources>
             <resource>
                 <directory>src/main/java</directory>
