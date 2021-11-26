@@ -22,13 +22,13 @@ public class SerialTool {
     public static ArrayList<String> findPort() {
 
         //获得当前所有可用串口
-        Enumeration<CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
+        Enumeration portList = CommPortIdentifier.getPortIdentifiers();
 
         ArrayList<String> portNameList = new ArrayList<>();
 
         //将可用串口名添加到List并返回该List
         while (portList.hasMoreElements()) {
-            CommPortIdentifier commPortIdentifier = portList.nextElement();
+            CommPortIdentifier commPortIdentifier = (CommPortIdentifier) portList.nextElement();
             portNameList.add(commPortIdentifier.getName());
         }
 
