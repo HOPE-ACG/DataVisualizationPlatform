@@ -126,12 +126,17 @@ public class SerialTool {
 
         InputStream in;
         byte[] bytes;
-
         try {
             in = serialPort.getInputStream();
-            bytes = new byte[in.available()];  //获取buffer里的数据长度
-            int read = 0;
-            while (read != -1) {
+            //获取buffer里的数据长度
+            int bufflenth = in.available();
+            //初始化byte数组为buffer中数据的长度
+            bytes = new byte[bufflenth];
+            //读取并保存
+            int read = in.read(bytes);
+            while (read == 0) {
+                bufflenth = in.available();
+                bytes = new byte[bufflenth];
                 read = in.read(bytes);
             }
         } catch (IOException e) {

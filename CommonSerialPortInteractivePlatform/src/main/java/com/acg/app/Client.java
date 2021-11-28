@@ -5,6 +5,7 @@ package com.acg.app;
  */
 public class Client {
 
+
     public static void main(String[] args) {
 
         DataViewApp dataViewApp = new DataViewApp();

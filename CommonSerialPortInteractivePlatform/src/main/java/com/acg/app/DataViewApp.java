@@ -8,8 +8,6 @@ import gnu.io.SerialPortEventListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -23,15 +21,19 @@ public class DataViewApp extends Frame {
 
     //程序界面宽度
     public static final int WIDTH = 800;
+
     //程序界面高度
     public static final int HEIGHT = 620;
+
     //程序界面出现位置（横坐标）
     public static final int LOC_X = 200;
+
     //程序界面出现位置（纵坐标）
     public static final int LOC_Y = 70;
 
     //保存可用端口号
     private ArrayList<String> commList;
+
     //保存串口对象
     private SerialPort serialPort = null;
 
@@ -123,44 +125,39 @@ public class DataViewApp extends Frame {
         openSerialButton.setForeground(Color.darkGray);
         add(openSerialButton);
         //添加打开串口按钮的事件监听
-        openSerialButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        //获取串口名称
-                        String commName = commChoice.getSelectedItem();
-                        //获取波特率
-                        String bpsStr = bpsChoice.getSelectedItem();
-                        //检查串口名称是否获取正确
-                        if (commName == null || commName.equals("")) {
-                            JOptionPane.showMessageDialog(null, "没有搜索到有效串口！",
-                                    "错误", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            //检查波特率是否获取正确
-                            if (bpsStr == null || bpsStr.equals("")) {
-                                JOptionPane.showMessageDialog(null, "波特率获取错误！",
-                                        "错误", JOptionPane.INFORMATION_MESSAGE);
-                            } else {
-                                //串口名、波特率均获取正确时
-                                int bps = Integer.parseInt(bpsStr);
-                                try {
-                                    //获取指定端口名及波特率的串口对象
-                                    serialPort = SerialTool.openPort(commName, bps);
-                                    //在该串口对象上添加监听器
-                                    SerialTool.addListener(serialPort, new SerialListener());
-                                    //监听成功进行提示
-                                    JOptionPane.showMessageDialog(null, "监听成功，稍后将显示监测数据！",
-                                            "提示", JOptionPane.INFORMATION_MESSAGE);
-                                } catch (SerialPortParameterFailure | NotASerialPort | NoSuchPort
-                                        | PortInUse | TooManyListeners e1) {
-                                    //发生错误时使用一个Dialog提示具体的错误信息
-                                    JOptionPane.showMessageDialog(null, e1, "错误", JOptionPane.INFORMATION_MESSAGE);
-                                }
-                            }
-                        }
-
+        openSerialButton.addActionListener(e -> {
+            //获取串口名称
+            String commName = commChoice.getSelectedItem();
+            //获取波特率
+            String bpsStr = bpsChoice.getSelectedItem();
+            //检查串口名称是否获取正确
+            if (commName == null || commName.equals("")) {
+                JOptionPane.showMessageDialog(null, "没有搜索到有效串口！",
+                        "错误", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                //检查波特率是否获取正确
+                if (bpsStr == null || bpsStr.equals("")) {
+                    JOptionPane.showMessageDialog(null, "波特率获取错误！",
+                            "错误", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    //串口名、波特率均获取正确时
+                    int bps = Integer.parseInt(bpsStr);
+                    try {
+                        //获取指定端口名及波特率的串口对象
+                        serialPort = SerialTool.openPort(commName, bps);
+                        //在该串口对象上添加监听器
+                        SerialTool.addListener(serialPort, new SerialListener());
+                        //监听成功进行提示
+                        JOptionPane.showMessageDialog(null, "监听成功，稍后将显示监测数据！",
+                                "提示", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (SerialPortParameterFailure | NotASerialPort | NoSuchPort
+                            | PortInUse | TooManyListeners e1) {
+                        //发生错误时使用一个Dialog提示具体的错误信息
+                        JOptionPane.showMessageDialog(null, e1, "错误", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-        );
+            }
+        });
 
         //添加关闭串口按钮
         closeSerialButton.setBounds(450, 490, 300, 50);
@@ -169,13 +166,12 @@ public class DataViewApp extends Frame {
         closeSerialButton.setForeground(Color.darkGray);
         add(closeSerialButton);
         //添加关闭串口按钮的事件监听
-        closeSerialButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SerialTool.closePort(serialPort);
-            }
-        });
-
+        closeSerialButton.addActionListener(e -> {
+                    SerialTool.closePort(serialPort);
+                    //监听成功进行提示
+                    JOptionPane.showMessageDialog(null, "关闭串口成功!",
+                            "提示", JOptionPane.INFORMATION_MESSAGE);
+                });
         this.setResizable(false);
         //启动重画线程
         new Thread(new RepaintThread()).start();
@@ -260,18 +256,9 @@ public class DataViewApp extends Frame {
                             commChoice.remove(i);
                         }
                     }
-                }else {
+                } else {
                     //如果扫描到的commList为空，则移除所有已有串口
                     commChoice.removeAll();
-                }
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    String err = ExceptionWriter.getErrorInfoFromException(e);
-                    JOptionPane.showMessageDialog(null, err,
-                            "错误", JOptionPane.INFORMATION_MESSAGE);
-                    System.exit(0);
                 }
             }
         }
@@ -292,6 +279,9 @@ public class DataViewApp extends Frame {
                     JOptionPane.showMessageDialog(null, "与串口设备通讯中断",
                             "错误", JOptionPane.INFORMATION_MESSAGE);
                     break;
+                // 输出缓冲区已清空
+                case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
+                    break;
                 // 串口存在可用数据
                 case SerialPortEvent.DATA_AVAILABLE:
                     byte[] bytes;
@@ -303,10 +293,10 @@ public class DataViewApp extends Frame {
                             //读取数据，存入字节数组
                             bytes = SerialTool.readFromPort(serialPort);
                             //数据清洗
-                            if (bytes.length > 4) {
+                            if (bytes.length > 0) {
                                 //将字节数组数据转换位为保存了原始数据的字符串
                                 String data= new String(bytes);
-                                String[] datas = data.split(",");
+                                String[] dataSplit = data.split(",");
 
                                 //解析数据
 
@@ -320,8 +310,8 @@ public class DataViewApp extends Frame {
 
 
                                 //更新界面Label值
-                                if(datas.length > 0) {
-                                    vol.setText(datas[1] + "V");
+                                if(dataSplit.length > 0) {
+                                    vol.setText(dataSplit[1] + "V");
                                 }
                             }
                         }
@@ -330,9 +320,6 @@ public class DataViewApp extends Frame {
                         //发生读取错误时显示错误信息后退出系统
                         System.exit(0);
                     }
-                    break;
-                //默认退出
-                default:
                     break;
             }
         }
