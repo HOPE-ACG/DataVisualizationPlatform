@@ -665,13 +665,13 @@
 </ObjectGrants>
     </user>
     <table id="207" parent="7" name="assessments"/>
-    <table id="208" parent="7" name="sensor_dht11"/>
-    <table id="209" parent="7" name="sensor_ds18b20"/>
-    <table id="210" parent="7" name="sensor_hj"/>
-    <table id="211" parent="7" name="sensor_max30102"/>
-    <table id="212" parent="7" name="sensor_mq135"/>
-    <table id="213" parent="7" name="sensor_mq9"/>
-    <table id="214" parent="7" name="sensor_z"/>
+    <table id="208" parent="7" name="mq135"/>
+    <table id="209" parent="7" name="mq9"/>
+    <table id="210" parent="7" name="sensor_dht11"/>
+    <table id="211" parent="7" name="sensor_ds18b20"/>
+    <table id="212" parent="7" name="sensor_max30102"/>
+    <table id="213" parent="7" name="sensor_mq135"/>
+    <table id="214" parent="7" name="sensor_mq9"/>
     <routine id="215" parent="7" name="del_data_dhds">
       <SourceTextLength>71</SourceTextLength>
       <Definer>root@localhost</Definer>
@@ -689,7 +689,7 @@
       <Starts>&apos;2020-10-15 00:00:00&apos;</Starts>
       <Preserve>1</Preserve>
       <Status>enabled</Status>
-      <LastExecuted>2020-10-15.00:00:00</LastExecuted>
+      <LastExecuted>2020-10-15</LastExecuted>
     </scheduled-event>
     <scheduled-event id="218" parent="7" name="del_fun_mq">
       <SourceTextLength>18</SourceTextLength>
@@ -733,22 +733,24 @@
     </key>
     <column id="226" parent="208" name="id">
       <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
+      <DataType>bigint(20)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="227" parent="208" name="humi">
+    <column id="227" parent="208" name="voltage">
       <Position>2</Position>
       <DataType>double|0s</DataType>
+      <NotNull>1</NotNull>
     </column>
-    <column id="228" parent="208" name="temp">
+    <column id="228" parent="208" name="time">
       <Position>3</Position>
-      <DataType>double|0s</DataType>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
     </column>
-    <column id="229" parent="208" name="TIME">
-      <Position>4</Position>
-      <DataType>datetime|0s</DataType>
-    </column>
+    <index id="229" parent="208" name="time">
+      <ColNames>time</ColNames>
+      <Type>btree</Type>
+    </index>
     <key id="230" parent="208" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
@@ -756,122 +758,128 @@
     </key>
     <column id="231" parent="209" name="id">
       <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
+      <DataType>bigint(20)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="232" parent="209" name="temp">
+    <column id="232" parent="209" name="voltage">
       <Position>2</Position>
       <DataType>double|0s</DataType>
-    </column>
-    <column id="233" parent="209" name="TIME">
-      <Position>3</Position>
-      <DataType>datetime|0s</DataType>
-    </column>
-    <key id="234" parent="209" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="235" parent="210" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="236" parent="210" name="vol">
-      <Position>2</Position>
-      <DataType>double|0s</DataType>
-    </column>
-    <column id="237" parent="210" name="time">
+    <column id="233" parent="209" name="time">
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
-    </column>
-    <key id="238" parent="210" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="239" parent="211" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
-      <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="240" parent="211" name="hr">
-      <Position>2</Position>
-      <DataType>int(11)|0s</DataType>
-    </column>
-    <column id="241" parent="211" name="spo2">
-      <Position>3</Position>
-      <DataType>int(11)|0s</DataType>
-    </column>
-    <column id="242" parent="211" name="time">
-      <Position>4</Position>
-      <DataType>datetime|0s</DataType>
-    </column>
-    <key id="243" parent="211" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="244" parent="212" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>null</SequenceIdentity>
-    </column>
-    <column id="245" parent="212" name="vol">
-      <Position>2</Position>
-      <DataType>double|0s</DataType>
-    </column>
-    <column id="246" parent="212" name="time">
-      <Position>3</Position>
-      <DataType>datetime|0s</DataType>
-    </column>
-    <key id="247" parent="212" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="248" parent="213" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>null</SequenceIdentity>
-    </column>
-    <column id="249" parent="213" name="vol">
-      <Position>2</Position>
-      <DataType>double|0s</DataType>
-    </column>
-    <column id="250" parent="213" name="TIME">
-      <Position>3</Position>
-      <DataType>datetime|0s</DataType>
-    </column>
-    <key id="251" parent="213" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="252" parent="214" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>null</SequenceIdentity>
-    </column>
-    <column id="253" parent="214" name="vol">
-      <Position>2</Position>
-      <DataType>double|0s</DataType>
-    </column>
-    <column id="254" parent="214" name="time">
-      <Position>3</Position>
-      <DataType>datetime|0s</DataType>
-    </column>
-    <index id="255" parent="214" name="index_name">
+    <index id="234" parent="209" name="time">
       <ColNames>time</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="256" parent="214" name="PRIMARY">
+    <key id="235" parent="209" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="236" parent="210" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="237" parent="210" name="humi">
+      <Position>2</Position>
+      <DataType>double|0s</DataType>
+    </column>
+    <column id="238" parent="210" name="temp">
+      <Position>3</Position>
+      <DataType>double|0s</DataType>
+    </column>
+    <column id="239" parent="210" name="TIME">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="240" parent="210" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="241" parent="211" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="242" parent="211" name="temp">
+      <Position>2</Position>
+      <DataType>double|0s</DataType>
+    </column>
+    <column id="243" parent="211" name="TIME">
+      <Position>3</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="244" parent="211" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="245" parent="212" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="246" parent="212" name="hr">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+    </column>
+    <column id="247" parent="212" name="spo2">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+    </column>
+    <column id="248" parent="212" name="time">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="249" parent="212" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="250" parent="213" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="251" parent="213" name="vol">
+      <Position>2</Position>
+      <DataType>double|0s</DataType>
+    </column>
+    <column id="252" parent="213" name="time">
+      <Position>3</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="253" parent="213" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="254" parent="214" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="255" parent="214" name="vol">
+      <Position>2</Position>
+      <DataType>double|0s</DataType>
+    </column>
+    <column id="256" parent="214" name="TIME">
+      <Position>3</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="257" parent="214" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>

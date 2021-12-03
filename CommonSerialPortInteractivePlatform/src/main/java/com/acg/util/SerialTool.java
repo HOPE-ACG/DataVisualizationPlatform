@@ -39,14 +39,14 @@ public class SerialTool {
     /**
      * 打开串口
      * @param portName 端口名称
-     * @param baudrate 波特率
+     * @param baudRate 波特率
      * @return 串口对象
      * @throws SerialPortParameterFailure 设置串口参数失败
      * @throws NotASerialPort 端口指向设备不是串口类型
      * @throws NoSuchPort 没有该端口对应的串口设备
      * @throws PortInUse 端口已被占用
      */
-    public static SerialPort openPort(String portName, int baudrate) throws
+    public static SerialPort openPort(String portName, int baudRate) throws
             SerialPortParameterFailure, NotASerialPort, NoSuchPort, PortInUse {
 
         try {
@@ -59,12 +59,11 @@ public class SerialTool {
                 SerialPort serialPort = (SerialPort) commPort;
                 try {
                     //设置一下串口的波特率等参数
-                    serialPort.setSerialPortParams(baudrate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+                    serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
                 } catch (UnsupportedCommOperationException e) {
                     throw new SerialPortParameterFailure();
                 }
                 return serialPort;
-
             }
             else {
                 throw new NotASerialPort();
@@ -80,11 +79,15 @@ public class SerialTool {
      * 关闭串口
      * @param serialPort 待关闭的串口对象
      */
-    public static void closePort(SerialPort serialPort) {
+    public static boolean closePort(SerialPort serialPort) {
 
         if (serialPort != null) {
+            //先删除时间监听器
+            serialPort.removeEventListener();
             serialPort.close();
+            return true;
         }
+        return false;
     }
 
     /**
@@ -129,14 +132,14 @@ public class SerialTool {
         try {
             in = serialPort.getInputStream();
             //获取buffer里的数据长度
-            int bufflenth = in.available();
+            int buffLen = in.available();
             //初始化byte数组为buffer中数据的长度
-            bytes = new byte[bufflenth];
+            bytes = new byte[buffLen];
             //读取并保存
             int read = in.read(bytes);
             while (read == 0) {
-                bufflenth = in.available();
-                bytes = new byte[bufflenth];
+                buffLen = in.available();
+                bytes = new byte[buffLen];
                 read = in.read(bytes);
             }
         } catch (IOException e) {

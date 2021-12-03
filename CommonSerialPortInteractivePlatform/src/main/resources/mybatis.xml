@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!-- 引入外部配置文件 -->
+    <properties resource="db.properties"/>
+    <!-- 开启全局缓存 默认开启 -->
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    <typeAliases>
+        <!-- 默认别名为首字母小写的类名 -->
+        <package name="com.acg.pojo"/>
+    </typeAliases>
+    <!-- 配置数据库环境 -->
+    <environments default="mysqlDevelopment">
+        <environment id="mysqlDevelopment">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${user}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/acg/dao/SensorMapper.xml"/>
+    </mappers>
+</configuration>
